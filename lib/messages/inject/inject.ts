@@ -49,6 +49,15 @@ export const injectCompressNudges = (
         return
     }
 
+    // Also clear nudges if the last message is a native compaction (summary)
+    if (lastAssistantMessage && lastAssistantMessage.info.summary === true) {
+        state.nudges.contextLimitAnchors.clear()
+        state.nudges.turnNudgeAnchors.clear()
+        state.nudges.iterationNudgeAnchors.clear()
+        void saveSessionState(state, logger)
+        return
+    }
+
     const { providerId, modelId } = getModelInfo(messages)
     let anchorsChanged = false
 
